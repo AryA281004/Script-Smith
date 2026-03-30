@@ -357,5 +357,8 @@ export const getTotalNotesNumber = async (dispatch) => {
   }
 }
 
+export default function handler(req, res) {
+  res.status(200).json({ message: "Hello" });
+}
 
 
