@@ -103,7 +103,7 @@ vec3 getLineColor(float t, vec3 baseColor) {
   return gradientColor * 0.5;
 }
 
-  float wave(vec2 uv, float offset, vec2 screenUv, vec2 mouseUv, bool shouldBend) {
+float wave(vec2 uv, float offset, vec2 screenUv, vec2 mouseUv, bool shouldBend) {
   float time = iTime * animationSpeed;
 
   float x_offset   = offset;
@@ -113,7 +113,7 @@ vec3 getLineColor(float t, vec3 baseColor) {
 
   if (shouldBend) {
     vec2 d = screenUv - mouseUv;
-    float influence = exp(-dot(d, d) * bendRadius); // radial falloff around cursor
+    float influence = exp(-dot(d, d) * bendRadius);
     float bendOffset = (mouseUv.y - screenUv.y) * influence * bendStrength * bendInfluence;
     y += bendOffset;
   }
@@ -140,8 +140,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     mouseUv.y *= -1.0;
   }
 
-  
-    if (enableExtra) {
+  if (enableExtra) {
     for (int i = 0; i < extraLineCount; ++i) {
       float fi = float(i);
       float t = fi / max(float(extraLineCount - 1), 1.0);
@@ -155,7 +154,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         baseUv,
         mouseUv,
         interactive
-      ) * 0.5; // Changed from 0.3 to 1.5 for extra brightness
+      ) * 0.5;
     }
   }
     
@@ -292,35 +291,21 @@ const Background = ({
     return lineDistance[index] ?? 0.1;
   };
 
-  const topLineCount = enabledWaves.includes("top") ? getLineCount("top") : 0;
-  const middleLineCount = enabledWaves.includes("middle")
-    ? getLineCount("middle")
-    : 0;
-  const bottomLineCount = enabledWaves.includes("bottom")
-    ? getLineCount("bottom")
-    : 0;
-  const extraLineCount = enabledWaves.includes("extra") ? getLineCount("extra") : 0;
+  const topLineCount    = enabledWaves.includes("top")    ? getLineCount("top")    : 0;
+  const middleLineCount = enabledWaves.includes("middle") ? getLineCount("middle") : 0;
+  const bottomLineCount = enabledWaves.includes("bottom") ? getLineCount("bottom") : 0;
+  const extraLineCount  = enabledWaves.includes("extra")  ? getLineCount("extra")  : 0;
 
-  const topLineDistance = enabledWaves.includes("top")
-    ? getLineDistance("top") * 0.01
-    : 0.01;
-  const middleLineDistance = enabledWaves.includes("middle")
-    ? getLineDistance("middle") * 0.01
-    : 0.01;
-  const bottomLineDistance = enabledWaves.includes("bottom")
-    ? getLineDistance("bottom") * 0.01
-    : 0.01;
-
-  const extraLineDistance = enabledWaves.includes("extra")
-    ? getLineDistance("extra") * 0.01
-    : 0.01;
+  const topLineDistance    = enabledWaves.includes("top")    ? getLineDistance("top")    * 0.01 : 0.01;
+  const middleLineDistance = enabledWaves.includes("middle") ? getLineDistance("middle") * 0.01 : 0.01;
+  const bottomLineDistance = enabledWaves.includes("bottom") ? getLineDistance("bottom") * 0.01 : 0.01;
+  const extraLineDistance  = enabledWaves.includes("extra")  ? getLineDistance("extra")  * 0.01 : 0.01;
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const scene = new Scene();
- 
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
     camera.position.z = 1;
 
@@ -335,59 +320,59 @@ const Background = ({
       iResolution: { value: new Vector3(1, 1, 1) },
       animationSpeed: { value: animationSpeed },
 
-      enableTop: { value: enabledWaves.includes("top") },
+      enableTop:    { value: enabledWaves.includes("top")    },
       enableMiddle: { value: enabledWaves.includes("middle") },
       enableBottom: { value: enabledWaves.includes("bottom") },
-      enableExtra: { value: enabledWaves.includes('extra') },
+      enableExtra:  { value: enabledWaves.includes("extra")  },
 
-      topLineCount: { value: topLineCount },
+      topLineCount:    { value: topLineCount    },
       middleLineCount: { value: middleLineCount },
       bottomLineCount: { value: bottomLineCount },
-      extraLineCount: { value: extraLineCount },
+      extraLineCount:  { value: extraLineCount  },
 
-      topLineDistance: { value: topLineDistance },
+      topLineDistance:    { value: topLineDistance    },
       middleLineDistance: { value: middleLineDistance },
       bottomLineDistance: { value: bottomLineDistance },
-      extraLineDistance: { value: extraLineDistance },
+      extraLineDistance:  { value: extraLineDistance  },
 
       topWavePosition: {
         value: new Vector3(
-          topWavePosition?.x ?? 10.0,
-          topWavePosition?.y ?? 0.5,
+          topWavePosition?.x      ?? 10.0,
+          topWavePosition?.y      ?? 0.5,
           topWavePosition?.rotate ?? -0.4,
         ),
       },
       middleWavePosition: {
         value: new Vector3(
-          middleWavePosition?.x ?? 5.0,
-          middleWavePosition?.y ?? 0.0,
+          middleWavePosition?.x      ?? 5.0,
+          middleWavePosition?.y      ?? 0.0,
           middleWavePosition?.rotate ?? 0.2,
         ),
       },
       bottomWavePosition: {
         value: new Vector3(
-          bottomWavePosition?.x ?? 2.0,
-          bottomWavePosition?.y ?? -0.7,
+          bottomWavePosition?.x      ?? 2.0,
+          bottomWavePosition?.y      ?? -0.7,
           bottomWavePosition?.rotate ?? 0.4,
         ),
       },
       extraWavePosition: {
         value: new Vector3(
-          extraWavePosition?.x ?? 8.0,
-          extraWavePosition?.y ?? 0.3,
-          extraWavePosition?.rotate ?? 0.6
-        )
+          extraWavePosition?.x      ?? 8.0,
+          extraWavePosition?.y      ?? 0.3,
+          extraWavePosition?.rotate ?? 0.6,
+        ),
       },
 
-      iMouse: { value: new Vector2(-1000, -1000) },
-      interactive: { value: interactive },
-      bendRadius: { value: bendRadius },
+      iMouse:       { value: new Vector2(-1000, -1000) },
+      interactive:  { value: interactive  },
+      bendRadius:   { value: bendRadius   },
       bendStrength: { value: bendStrength },
       bendInfluence: { value: 0 },
 
-      parallax: { value: parallax },
+      parallax:         { value: parallax         },
       parallaxStrength: { value: parallaxStrength },
-      parallaxOffset: { value: new Vector2(0, 0) },
+      parallaxOffset:   { value: new Vector2(0, 0) },
 
       lineGradient: {
         value: Array.from(
@@ -401,19 +386,13 @@ const Background = ({
     if (linesGradient && linesGradient.length > 0) {
       const stops = linesGradient.slice(0, MAX_GRADIENT_STOPS);
       uniforms.lineGradientCount.value = stops.length;
-
       stops.forEach((hex, i) => {
         const color = hexToVec3(hex);
         uniforms.lineGradient.value[i].set(color.x, color.y, color.z);
       });
     }
 
-    const material = new ShaderMaterial({
-      uniforms,
-      vertexShader,
-      fragmentShader,
-    });
-
+    const material = new ShaderMaterial({ uniforms, vertexShader, fragmentShader });
     const geometry = new PlaneGeometry(2, 2);
     const mesh = new Mesh(geometry, material);
     scene.add(mesh);
@@ -421,26 +400,21 @@ const Background = ({
     const clock = new Clock();
 
     const setSize = () => {
-      const width = container.clientWidth || 1;
+      const width  = container.clientWidth  || 1;
       const height = container.clientHeight || 1;
-
       renderer.setSize(width, height, false);
-
-      const canvasWidth = renderer.domElement.width;
+      const canvasWidth  = renderer.domElement.width;
       const canvasHeight = renderer.domElement.height;
       uniforms.iResolution.value.set(canvasWidth, canvasHeight, 1);
     };
 
     setSize();
 
-    const ro =
-      typeof ResizeObserver !== "undefined"
-        ? new ResizeObserver(setSize)
-        : null;
+    const ro = typeof ResizeObserver !== "undefined"
+      ? new ResizeObserver(setSize)
+      : null;
 
-    if (ro) {
-      ro.observe(container);
-    }
+    if (ro) ro.observe(container);
 
     const handlePointerMove = (event) => {
       const rect = renderer.domElement.getBoundingClientRect();
@@ -452,9 +426,9 @@ const Background = ({
       targetInfluenceRef.current = 1.0;
 
       if (parallax) {
-        const centerX = rect.width / 2;
+        const centerX = rect.width  / 2;
         const centerY = rect.height / 2;
-        const offsetX = (x - centerX) / rect.width;
+        const offsetX =  (x - centerX) / rect.width;
         const offsetY = -(y - centerY) / rect.height;
         targetParallaxRef.current.set(
           offsetX * parallaxStrength,
@@ -468,7 +442,7 @@ const Background = ({
     };
 
     if (interactive) {
-      renderer.domElement.addEventListener("pointermove", handlePointerMove);
+      renderer.domElement.addEventListener("pointermove",  handlePointerMove);
       renderer.domElement.addEventListener("pointerleave", handlePointerLeave);
     }
 
@@ -481,16 +455,12 @@ const Background = ({
         uniforms.iMouse.value.copy(currentMouseRef.current);
 
         currentInfluenceRef.current +=
-          (targetInfluenceRef.current - currentInfluenceRef.current) *
-          mouseDamping;
+          (targetInfluenceRef.current - currentInfluenceRef.current) * mouseDamping;
         uniforms.bendInfluence.value = currentInfluenceRef.current;
       }
 
       if (parallax) {
-        currentParallaxRef.current.lerp(
-          targetParallaxRef.current,
-          mouseDamping,
-        );
+        currentParallaxRef.current.lerp(targetParallaxRef.current, mouseDamping);
         uniforms.parallaxOffset.value.copy(currentParallaxRef.current);
       }
 
@@ -499,36 +469,29 @@ const Background = ({
     };
     renderLoop();
 
-    let isDisposed = false;
-
+    // ─── CLEANUP ──────────────────────────────────────────────────────────────
     return () => {
-      if (isDisposed) return;
-      isDisposed = true;
-
       cancelAnimationFrame(raf);
+
       if (ro) ro.disconnect();
 
       if (interactive) {
-        renderer.domElement.removeEventListener(
-          "pointermove",
-          handlePointerMove,
-        );
-        renderer.domElement.removeEventListener(
-          "pointerleave",
-          handlePointerLeave,
-        );
+        renderer.domElement.removeEventListener("pointermove",  handlePointerMove);
+        renderer.domElement.removeEventListener("pointerleave", handlePointerLeave);
       }
 
       geometry.dispose();
       material.dispose();
       renderer.dispose();
 
-      if (
-        renderer.domElement &&
-        container &&
-        renderer.domElement.parentNode === container
-      ) {
-        renderer.domElement.remove();
+      // ✅ Safe removal: container.contains() handles React Strict Mode double
+      // invocations and any case where the canvas was already removed.
+      try {
+        if (container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
+      } catch (_) {
+        // silently ignore — canvas already detached
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
