@@ -528,7 +528,7 @@ const Background = ({
         container &&
         renderer.domElement.parentNode === container
       ) {
-        container.removeChild(renderer.domElement);
+        renderer.domElement.remove();
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
