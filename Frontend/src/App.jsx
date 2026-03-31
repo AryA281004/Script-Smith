@@ -24,7 +24,7 @@ const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 
 
 
-export const serverUrl = (import.meta.env.VITE_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
+export const serverUrl = import.meta.env.VITE_BACKEND_URL ;
 
 const App = () => {
   const dispatch = useDispatch();
