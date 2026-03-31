@@ -4,10 +4,10 @@ const { getToken } = require("../utils/token");
 // ✅ FINAL COOKIE OPTIONS (CORRECT)
 const cookieOptions = {
   httpOnly: true,
-  secure: true,          // required for HTTPS (Vercel)
+  secure: true,          // required for HTTPS
   sameSite: "None",      // ✅ FIXED (case-sensitive)
   path: "/",             // required
-  domain: ".vercel.app", // ✅ CRITICAL: Allow cross-subdomain cookies
+  domain: ".onrender.com", // ✅ CRITICAL: Match backend deployment domain
   maxAge: 7 * 24 * 60 * 60 * 1000
 };
 
