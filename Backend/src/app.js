@@ -7,17 +7,19 @@ const {stripeWebhook} = require('./controllers/payment.controller');
 
 const app = express();
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'https://57106bf4-5173.inc1.devtunnels.ms/',
+].filter(Boolean);
+
 app.post('/api/payment/webhook',
   express.raw({type: 'application/json'}),
   stripeWebhook
 ); 
   
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL ||
-    'http://localhost:5173'||
-    'https://57106bf4-5173.inc1.devtunnels.ms/'
-  ],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   exposedHeaders: ['Content-Disposition'],
