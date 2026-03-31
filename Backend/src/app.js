@@ -29,7 +29,14 @@ app.use(cors({
     if (!origin) return callback(null, true);
 
     const normalizedRequestOrigin = normalizeOrigin(origin);
+    
+    // Check against allowed list
     if (allowedOrigins.includes(normalizedRequestOrigin)) {
+      return callback(null, true);
+    }
+    
+    // Also allow all Vercel domains (*.vercel.app) for flexibility
+    if (normalizedRequestOrigin.endsWith('.vercel.app') || normalizedRequestOrigin === 'http://localhost:5173') {
       return callback(null, true);
     }
 
