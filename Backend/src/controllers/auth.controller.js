@@ -1,12 +1,12 @@
 const userModel = require("../models/user.model");
 const { getToken } = require("../utils/token");
 
-// 🔥 COMMON COOKIE OPTIONS (reuse everywhere)
+// ✅ FINAL COOKIE OPTIONS (CORRECT)
 const cookieOptions = {
   httpOnly: true,
-  secure: true,          // ✅ required for HTTPS (Vercel)
-  sameSite: "none",      // ✅ required for cross-origin
-  path: "/",             // ✅ CRITICAL FIX (your missing piece)
+  secure: true,          // required for HTTPS (Vercel)
+  sameSite: "None",      // ✅ FIXED (case-sensitive)
+  path: "/",             // required
   maxAge: 7 * 24 * 60 * 60 * 1000
 };
 
@@ -122,9 +122,7 @@ const loginUser = async (req, res) => {
 const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", cookieOptions);
-
     return res.status(200).json({ message: "Logout successful" });
-
   } catch (error) {
     console.error("Logout error:", error);
     res.status(500).json({ message: "Internal server error" });
