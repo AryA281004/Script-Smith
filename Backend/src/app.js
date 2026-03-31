@@ -7,11 +7,16 @@ const {stripeWebhook} = require('./controllers/payment.controller');
 
 const app = express();
 
+const normalizeOrigin = (origin = '') => origin.replace(/\/+$/, '');
+
 const allowedOrigins = [
   process.env.FRONTEND_URL,
+  process.env.CLIENT_URL,
   'http://localhost:5173',
   'https://57106bf4-5173.inc1.devtunnels.ms/',
-].filter(Boolean);
+]
+  .filter(Boolean)
+  .map(normalizeOrigin);
 
 app.post('/api/payment/webhook',
   express.raw({type: 'application/json'}),
@@ -19,7 +24,17 @@ app.post('/api/payment/webhook',
 ); 
   
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow non-browser/server-to-server requests
+    if (!origin) return callback(null, true);
+
+    const normalizedRequestOrigin = normalizeOrigin(origin);
+    if (allowedOrigins.includes(normalizedRequestOrigin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   exposedHeaders: ['Content-Disposition'],
