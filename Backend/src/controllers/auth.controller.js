@@ -7,6 +7,7 @@ const cookieOptions = {
   secure: true,          // required for HTTPS (Vercel)
   sameSite: "None",      // ✅ FIXED (case-sensitive)
   path: "/",             // required
+  domain: ".vercel.app", // ✅ CRITICAL: Allow cross-subdomain cookies
   maxAge: 7 * 24 * 60 * 60 * 1000
 };
 
