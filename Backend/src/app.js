@@ -14,7 +14,8 @@ app.post('/api/payment/webhook',
   
 app.use(cors({
   origin: [
-    'http://localhost:5173',
+    process.env.FRONTEND_URL ||
+    'http://localhost:5173'||
     'https://57106bf4-5173.inc1.devtunnels.ms/'
   ],
   credentials: true,

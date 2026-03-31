@@ -1,6 +1,8 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import dotenv from "dotenv";
+dotenv.config();
 
 import Background from "./components/Background";
 import Loader from "./components/Loader";
@@ -24,7 +26,7 @@ const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 
 
 
-export const serverUrl = "http://localhost:3000";
+export const serverUrl = BACKEND_URL || "http://localhost:3000";
 
 const App = () => {
   const dispatch = useDispatch();
