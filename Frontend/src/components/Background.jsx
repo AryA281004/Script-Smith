@@ -523,10 +523,12 @@ const Background = ({
       material.dispose();
       renderer.dispose();
 
-     const parent = renderer.domElement.parentNode;
-
-if (parent && parent.contains(renderer.domElement)) {
-  parent.removeChild(renderer.domElement);
+ try {
+  if (renderer.domElement && renderer.domElement.parentNode === container) {
+    container.removeChild(renderer.domElement);
+  }
+} catch (err) {
+  console.warn("Cleanup skipped:", err);
 }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
