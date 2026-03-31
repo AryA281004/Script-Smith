@@ -523,13 +523,13 @@ const Background = ({
       material.dispose();
       renderer.dispose();
 
- try {
-  if (renderer.domElement && renderer.domElement.parentNode === container) {
-    container.removeChild(renderer.domElement);
-  }
-} catch (err) {
-  console.warn("Cleanup skipped:", err);
-}
+      try {
+        if (renderer.domElement?.parentNode) {
+          renderer.domElement.parentNode.removeChild(renderer.domElement);
+        }
+      } catch (err) {
+        // Silently ignore errors from third-party libraries that may have already removed the node
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
