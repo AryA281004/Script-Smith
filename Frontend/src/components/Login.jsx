@@ -146,7 +146,13 @@ const Login = ({ onSwitch }) => {
 
       const data = response.data;
 
-      if (data && data.user) dispatch(setUserData(data.user));
+      if (data && data.user) {
+        dispatch(setUserData(data.user));
+        // ✅ CRITICAL: Store token in localStorage for cross-domain auth
+        if (data.token) {
+          localStorage.setItem("authToken", data.token);
+        }
+      }
       setForgotPromptVisible(false);
       toast.success("Login successful!", { id: toastId });
       redirect("/authcomplete");

@@ -2,6 +2,18 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { setUserData, logoutUser, updateCredits } from "../redux/userSlice";
 
+// ✅ CRITICAL: Add token to Authorization header for cross-domain requests
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 const getPdfFilenameFromHeaders = (headers, fallback = "script-smith.pdf") => {
   const disposition = headers?.["content-disposition"] || headers?.["Content-Disposition"];
   if (!disposition || typeof disposition !== "string") return fallback;
@@ -57,8 +69,10 @@ export const getcurrentUser = async (dispatch, getState) => {
 export const  logoutCurrentUser = async (dispatch) => {
   try {
     // Clear user data first to prevent access
-
     dispatch(logoutUser());
+    
+    // ✅ CRITICAL: Clear token from localStorage
+    localStorage.removeItem("authToken");
 
     // Then call the logout API
     await axios.post(
